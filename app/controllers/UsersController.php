@@ -24,9 +24,9 @@ class UsersController extends BaseController {
 		    $user->password = Hash::make(Input::get('password'));
 		    $user->save();
 		 
-		    return Redirect::to('users/login')->with('message', 'Thanks for registering!');
+		    return Redirect::to('users/login')->with('success', 'Thanks for registering!');
 	    } else {
-	    	return Redirect::to('users/register')->with('message', 'The following errors occurred')->withErrors($validator)->withInput();  
+	    	return Redirect::to('users/register')->with('error', 'The following errors occurred')->withErrors($validator)->withInput();  
 	    }
 	}
 
@@ -36,16 +36,21 @@ class UsersController extends BaseController {
 
 	public function postSignin() {
     	if (Auth::attempt(array('email'=>Input::get('email'), 'password'=>Input::get('password')))) {
-		    return Redirect::to('users/dashboard')->with('message', 'You are now logged in!');
+		    return Redirect::to('users/dashboard')->with('success', 'You are now logged in!');
 		} else {
 		    return Redirect::to('users/login')
-		        ->with('message', 'Your username/password combination was incorrect')
+		        ->with('error', 'Your username/password combination was incorrect')
 		        ->withInput();
 		}      
 	}
 
 	public function getDashboard() {
     	$this->layout->content = View::make('users.dashboard');
+	}
+
+	public function getLogout() {
+	    Auth::logout();
+	    return Redirect::to('users/login')->with('success', 'Your are now logged out!');
 	}
 }
 ?>

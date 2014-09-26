@@ -22,16 +22,25 @@
 
       <section class="top-bar-section">
         <ul class="right">
-            <li>{{ HTML::link('users/register', 'Register') }}</li>
-            <li>{{ HTML::link('users/login', 'Login') }}</li>
+            @if(!Auth::check())
+                <li>{{ HTML::link('users/register', 'Register') }}</li>   
+                <li>{{ HTML::link('users/login', 'Login') }}</li>   
+            @else
+                <li>{{ HTML::link('users/logout', 'logout') }}</li>
+            @endif
         </ul>
       </section>
     </nav>   
  
     <div class="container">
-        @if(Session::has('message'))
+        @if(Session::has('alert'))
             <div class="alert-box alert" data-alert>
-                {{ Session::get('message') }}
+                {{ Session::get('error') }}
+                <a href="#" class="close">&times;</a>
+            </div>
+        @elseif(Session::has('success'))
+            <div class="alert-box success" data-alert>
+                {{ Session::get('success') }}
                 <a href="#" class="close">&times;</a>
             </div>
         @endif
