@@ -15,7 +15,7 @@
     <nav class="top-bar" data-topbar role="navigation">
       <ul class="title-area">
         <li class="name">
-          <h1><a href="#">Cellar</a></h1>
+          <h1><a href="/">Cellar</a></h1>
         </li>
         <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
       </ul>
@@ -26,7 +26,8 @@
                 <li>{{ HTML::link('users/register', 'Register') }}</li>   
                 <li>{{ HTML::link('users/login', 'Login') }}</li>   
             @else
-                <li>{{ HTML::link('users/logout', 'logout') }}</li>
+                <li>{{ HTML::link('users/dashboard', 'Dashboard') }}</li>
+                <li>{{ HTML::link('users/logout', 'Logout') }}</li>
             @endif
         </ul>
       </section>
