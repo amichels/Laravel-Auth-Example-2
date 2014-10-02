@@ -1,3 +1,3 @@
 <h1>Dashboard</h1>
  
-<p>Welcome to your Dashboard, {{ $user->firstname }}. You rock!</p>
+<p>Welcome to your Dashboard, {{ $user->firstname }}.</p>
