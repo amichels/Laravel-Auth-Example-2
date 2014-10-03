@@ -7,4 +7,4 @@
     {{ Form::submit('Login', array('class'=>'button'))}}
 {{ Form::close() }}
 
-<a href="/password/reset" title="Reset Password">Reset Password</a>
+<a href="/password/remind" title="Remind Password">Remind Password</a>
