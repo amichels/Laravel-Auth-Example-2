@@ -2,8 +2,8 @@
 
 <form action="{{ action('RemindersController@update') }}" method="POST">
     <input type="hidden" name="token" value="{{ $token }}">
-    <input type="email" name="email">
-    <input type="password" name="password">
-    <input type="password" name="password_confirmation">
-    <input type="submit" value="Reset Password">
+    <input class="input-block-level" type="email" name="email">
+    <input class="input-block-level" type="password" name="password">
+    <input class="input-block-level" type="password" name="password_confirmation">
+    <input class="button" type="submit" value="Reset Password">
 </form>

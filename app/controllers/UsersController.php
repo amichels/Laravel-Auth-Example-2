@@ -39,7 +39,7 @@ class UsersController extends BaseController {
 		    return Redirect::to('users/dashboard')->with('success', 'You are now logged in!');
 		} else {
 		    return Redirect::to('users/login')
-		        ->with('error', 'Your username/password combination was incorrect')
+		        ->with('alert', 'Your username/password combination was incorrect')
 		        ->withInput();
 		}      
 	}

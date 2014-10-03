@@ -36,7 +36,7 @@
     <div class="container">
         @if(Session::has('alert'))
             <div class="alert-box alert" data-alert>
-                {{ Session::get('error') }}
+                {{ Session::get('alert') }}
                 <a href="#" class="close">&times;</a>
             </div>
         @elseif(Session::has('success'))
