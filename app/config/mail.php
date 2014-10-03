@@ -6,8 +6,8 @@ return array(
 	'port' => 587,
 	'from' => array('address' => 'andy.j.michels@gmail.com', 'name' => 'Andy Michels'),
 	'encryption' => 'tls',
-	'username' => GMAIL_USERNAME,
-	'password' => GMAIL_PASSWORD,
+	'username' => getenv('GMAIL_USERNAME'),
+	'password' => getenv('GMAIL_PASSWORD'),
 	'sendmail' => '/usr/sbin/sendmail -bs',
 	'pretend' => false,
 );
