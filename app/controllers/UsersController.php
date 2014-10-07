@@ -27,16 +27,19 @@ class UsersController extends BaseController {
 		 
 		    return Redirect::to('users/login')->with('success', 'Thanks for registering!');
 	    } else {
-	    	return Redirect::to('users/register')->with('alert', 'The following errors occurred')->withErrors(array_merge_recursive($simpleRules->messages()->toArray(), $passwordRules->messages()->toArray()))->withInput();
+	    	$validation = array_merge_recursive($simpleRules->messages()->toArray(), $passwordRules->messages()->toArray());
+	    	return Redirect::to('users/register')->with('alert', 'The following errors occurred')->withErrors($validation)->withInput();
 	    }
 	}
 
-	public function getEdit($id){
+	public function getEdit(){
+		$id = Auth::user()->id;
 		$user = User::find($id);
 		$this->layout->content = View::make('users.edit')->with('user', $user);
 	}
 
-	public function postUpdate($id){
+	public function postUpdate(){
+		$id = Auth::user()->id;
 		$simpleRules = Validator::make(Input::all(), User::$simpleRules);
 		if ($simpleRules->passes()) {
 		    $user = User::find($id);
@@ -44,9 +47,9 @@ class UsersController extends BaseController {
 		    $user->lastname = Input::get("lastname");
 		    $user->email = Input::get("email");
 		    $user->save();
-		    return Redirect::to('users/'.$id.'/edit/')->with('success', 'Your account has been updated.');
+		    return Redirect::to('users/edit/')->with('success', 'Your account has been updated.');
 	    } else {
-	    	return Redirect::to('users/'.$id.'/edit/')->with('alert', 'The following errors occurred')->withErrors($simpleRules)->withInput(); 
+	    	return Redirect::to('users/edit/')->with('alert', 'The following errors occurred')->withErrors($simpleRules)->withInput(); 
 	    }
 	}
 

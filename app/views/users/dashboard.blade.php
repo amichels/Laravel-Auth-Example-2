@@ -2,3 +2,4 @@
  
 <p>Welcome to your Dashboard, {{ $user->firstname }}.</p>
 
+{{ HTML::linkAction('UsersController@getEdit', 'Edit Profile Info') }}
