@@ -1,6 +1,6 @@
 {{ Form::open(array('url'=>'users/create', 'class'=>'form-center')) }}
     <h2 class="form-signup-heading">Please Register</h2>
- 
+
     <ul>
         @foreach($errors->all() as $error)
             <li>{{ $error }}</li>

@@ -4,7 +4,7 @@ class UsersController extends BaseController {
 
 	public function __construct() {
 	    $this->beforeFilter('csrf', array('on'=>'post'));
-	    $this->beforeFilter('auth', array('only'=>array('getDashboard')));
+	    $this->beforeFilter('auth', array('only'=>array('getDashboard','getEdit')));
 	}
 
     protected $layout = "layouts.main";
@@ -14,9 +14,10 @@ class UsersController extends BaseController {
 	}
 
 	public function postCreate() {
-	    $validator = Validator::make(Input::all(), User::$rules);
+	    $simpleRules = Validator::make(Input::all(), User::$simpleRules);
+	    $passwordRules = Validator::make(Input::all(), User::$passwordRules);
 	 
-	    if ($validator->passes()) {
+	    if ($simpleRules->passes() and $passwordRules->passes()) {
 	    	$user = new User;
 		    $user->firstname = Input::get('firstname');
 		    $user->lastname = Input::get('lastname');
@@ -26,7 +27,26 @@ class UsersController extends BaseController {
 		 
 		    return Redirect::to('users/login')->with('success', 'Thanks for registering!');
 	    } else {
-	    	return Redirect::to('users/register')->with('error', 'The following errors occurred')->withErrors($validator)->withInput();  
+	    	return Redirect::to('users/register')->with('alert', 'The following errors occurred')->withErrors(array_merge_recursive($simpleRules->messages()->toArray(), $passwordRules->messages()->toArray()))->withInput();
+	    }
+	}
+
+	public function getEdit($id){
+		$user = User::find($id);
+		$this->layout->content = View::make('users.edit')->with('user', $user);
+	}
+
+	public function postUpdate($id){
+		$simpleRules = Validator::make(Input::all(), User::$simpleRules);
+		if ($simpleRules->passes()) {
+		    $user = User::find($id);
+		    $user->firstname = Input::get("firstname");
+		    $user->lastname = Input::get("lastname");
+		    $user->email = Input::get("email");
+		    $user->save();
+		    return Redirect::to('users/'.$id.'/edit/')->with('success', 'Your account has been updated.');
+	    } else {
+	    	return Redirect::to('users/'.$id.'/edit/')->with('alert', 'The following errors occurred')->withErrors($simpleRules)->withInput(); 
 	    }
 	}
 
