@@ -11,8 +11,7 @@
     {{ Form::text('firstname', null, array('class'=>'input-block-level', 'placeholder'=>'First Name')) }}
     {{ Form::text('lastname', null, array('class'=>'input-block-level', 'placeholder'=>'Last Name')) }}
     {{ Form::text('email', null, array('class'=>'input-block-level', 'placeholder'=>'Email Address')) }}
-    <!--{{ Form::password('password', array('placeholder'=>'Password')) }}
-    {{ Form::password('password_confirmation', array('placeholder'=>'Confirm Password')) }}-->
+    {{ Form::password('password', array('placeholder'=>'Password')) }}
  
     {{ Form::submit('Update', array('class'=>'button'))}}
 {{ Form::close() }}

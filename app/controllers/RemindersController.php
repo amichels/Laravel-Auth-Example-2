@@ -42,7 +42,7 @@ class RemindersController extends BaseController {
 			return Redirect::back()->with('alert', Lang::get($response));
 
 			case Password::PASSWORD_RESET:
-		    return Redirect::to('/');
+		    return Redirect::to('/users/login')->with('success','Password has been successfuly reset. Please login with new password.');
 		}
 	}
 }

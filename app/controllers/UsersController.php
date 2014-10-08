@@ -40,17 +40,25 @@ class UsersController extends BaseController {
 
 	public function postUpdate(){
 		$id = Auth::user()->id;
-		$simpleRules = Validator::make(Input::all(), User::$simpleRules);
-		if ($simpleRules->passes()) {
-		    $user = User::find($id);
-		    $user->firstname = Input::get("firstname");
-		    $user->lastname = Input::get("lastname");
-		    $user->email = Input::get("email");
-		    $user->save();
-		    return Redirect::to('users/edit/')->with('success', 'Your account has been updated.');
-	    } else {
-	    	return Redirect::to('users/edit/')->with('alert', 'The following errors occurred')->withErrors($simpleRules)->withInput(); 
-	    }
+		//check password in auth before updating user
+		if (Hash::check(Input::get('password'), Auth::user()->password)){ 
+		    // The passwords match...
+		    $simpleRules = Validator::make(Input::all(), User::$simpleRules);
+			if ($simpleRules->passes()) {
+			    $user = User::find($id);
+			    $user->firstname = Input::get("firstname");
+			    $user->lastname = Input::get("lastname");
+			    $user->email = Input::get("email");
+			    $user->save();
+			    return Redirect::to('users/edit/')->with('success', 'Your account has been updated.');
+		    } else {
+		    	return Redirect::to('users/edit/')->with('alert', 'The following errors occurred')->withErrors($simpleRules)->withInput(); 
+		    }
+		}
+		//if it doesn't pass redirect with alert
+		else {
+		    return Redirect::to('users/edit/')->with('alert', 'Incorrect password.');
+		}
 	}
 
 	public function getLogin() {
@@ -76,7 +84,7 @@ class UsersController extends BaseController {
 
 	public function getLogout() {
 	    Auth::logout();
-	    return Redirect::to('users/login')->with('success', 'Your are now logged out!');
+	    return Redirect::to('users/login')->with('success', 'You are now logged out!');
 	}
 }
 ?>
