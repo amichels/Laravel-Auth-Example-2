@@ -4,7 +4,7 @@ class UsersController extends BaseController {
 
 	public function __construct() {
 	    $this->beforeFilter('csrf', array('on'=>'post'));
-	    $this->beforeFilter('auth', array('only'=>array('getDashboard','getEdit')));
+	    $this->beforeFilter('auth', array('only'=>array('getDashboard','getEdit','getDelete')));
 	}
 
     protected $layout = "layouts.main";
@@ -25,11 +25,37 @@ class UsersController extends BaseController {
 		    $user->password = Hash::make(Input::get('password'));
 		    $user->save();
 		 
-		    return Redirect::to('users/login')->with('success', 'Thanks for registering!');
+		    return Redirect::to('users/login')->with('success', 'Thanks for registering! Please log in.');
 	    } else {
 	    	$validation = array_merge_recursive($simpleRules->messages()->toArray(), $passwordRules->messages()->toArray());
 	    	return Redirect::to('users/register')->with('alert', 'The following errors occurred')->withErrors($validation)->withInput();
 	    }
+	}
+
+	public function getLogin() {
+	    $this->layout->content = View::make('users.login');
+	}
+
+	public function postSignin() {
+    	if (Auth::attempt(array('email'=>Input::get('email'), 'password'=>Input::get('password')))) {
+		    return Redirect::to('users/dashboard')->with('success', 'You are now logged in!');
+		} else {
+		    return Redirect::to('users/login')
+		        ->with('alert', 'Your username/password combination was incorrect')
+		        ->withInput();
+		}      
+	}
+
+	public function getDashboard() {
+		$id = Auth::id();
+		$user = User::find($id);
+    	$this->layout->content = View::make('users.dashboard')
+			->with('user', $user);
+	}
+
+	public function getLogout() {
+	    Auth::logout();
+	    return Redirect::to('users/login')->with('success', 'You are now logged out!');
 	}
 
 	public function getEdit(){
@@ -61,30 +87,20 @@ class UsersController extends BaseController {
 		}
 	}
 
-	public function getLogin() {
-	    $this->layout->content = View::make('users.login');
-	}
-
-	public function postSignin() {
-    	if (Auth::attempt(array('email'=>Input::get('email'), 'password'=>Input::get('password')))) {
-		    return Redirect::to('users/dashboard')->with('success', 'You are now logged in!');
-		} else {
-		    return Redirect::to('users/login')
-		        ->with('alert', 'Your username/password combination was incorrect')
-		        ->withInput();
-		}      
-	}
-
-	public function getDashboard() {
-		$id = Auth::id();
+	public function getDelete(){
+		$id = Auth::user()->id;
 		$user = User::find($id);
-    	$this->layout->content = View::make('users.dashboard')
+		$this->layout->content = View::make('users.delete')
 			->with('user', $user);
 	}
 
-	public function getLogout() {
-	    Auth::logout();
-	    return Redirect::to('users/login')->with('success', 'You are now logged out!');
+	public function deleteUser() {
+		$id = Auth::user()->id;
+		$user = User::find($id);
+		//make sure to logout user before destroying user
+		Auth::logout();
+	    $user->delete();
+	    return Redirect::to('users/login')->with('success', 'Your account has been deleted!');
 	}
 }
 ?>

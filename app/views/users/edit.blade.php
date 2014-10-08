@@ -1,4 +1,4 @@
-{{ Form::model($user, ['role' => 'form', 'url' => '/users/update/' . Auth::user()->id, 'method' => 'POST']) }}
+{{ Form::model($user, ['role' => 'form', 'url' => '/users/update/', 'method' => 'POST']) }}
 
 	<ul>
         @foreach($errors->all() as $error)
